@@ -1,7 +1,7 @@
-## Put comments here that give an overall description of what your
-## functions do
+## A special cachable-matrix that
+## saves the computed inverse to save time, unless/until
+## the data are changed.
 
-## Write a short comment describing this function
 ## The function to create a cache-able matrix, which
 ## returns a list of four functions, to
 ## set - stash the data in cache 
@@ -32,8 +32,6 @@ makeCacheMatrix <- function(x = matrix()) {
        setInverse=setInverse)
 }
 
-
-## Write a short comment describing this function
 ## The function to utilize the caching feature of a special matrix
 ## created with 'makeCacheMatrix' above.
 ## This checks to see if cache has data, before computing the inverse
@@ -51,3 +49,25 @@ cacheSolve <- function(x, ...) {
   x$setInverse(Inv)
   Inv
 }
+
+# TESTS
+# Set up data
+y <- c(1,2,3,0,1,4,5,6,0)
+mm <- matrix(y, nrow=3)
+mm
+# Make an instance of cache-able matrix
+mms <- makeCacheMatrix(mm)
+# Solve for inverse .. once
+cacheSolve(mms)
+# .. and again.
+cacheSolve(mms)
+# Change the data
+z <- c(4,5,6,6,5,4,4,6,5)
+nn <- matrix(z, nrow=3)
+mms$set(nn)
+mms$get() # What did we change it to?
+# Solve for inverse ..
+cacheSolve(mms)
+# .. and again.
+cacheSolve(mms)
+
